@@ -1,0 +1,30 @@
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
+public class Kassa {
+ private boolean isEmpty;
+ private double timeEmpty;
+ 
+ public Kassa() {
+	 isEmpty = true;
+	 timeEmpty = 0;
+ }
+ public double getTimeEmpty() {
+	 return timeEmpty;
+ }
+ public void resetTime() {
+	 timeEmpty = 0;
+	 
+ }
+ public void addTimeEmpty(double currentTime, double eventTime){
+	 timeEmpty = eventTime - currentTime;
+ }
+ public boolean isEmpty() {
+	 return isEmpty;
+ }
+}
