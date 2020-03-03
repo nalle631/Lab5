@@ -3,7 +3,8 @@
  *
  */
 abstract class Event {
-
+	
+	protected double happeningTime;
 	State state;
 	abstract	void effekt();
 	abstract public double getTime();
