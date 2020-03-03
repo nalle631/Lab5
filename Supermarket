@@ -1,0 +1,96 @@
+/**
+ * 
+ */
+import java.util.*;
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
+public class Supermarket {
+ private boolean isOpen;
+ private int antalKassor;
+ private int maxCapacity;
+ 
+ private int customersInStore;
+ private int customersDenied;
+ private int closingTime;
+ private int totalCustomers;
+ 
+ private double currentTime;
+ 
+ private ArrayList <Kassa> kassor = new ArrayList<Kassa>();
+ private double timeKassaEmpty;
+ 
+ 
+ public Supermarket(int antalKassor, int maxCapacity, int closingTime) {
+	 isOpen = false;
+	 this.closingTime = closingTime;
+	 this.maxCapacity = maxCapacity;
+	 this.antalKassor = antalKassor;
+	 for(int i = 0; i < antalKassor; i++) {
+		 Kassa a1 = new Kassa();
+		 kassor.add(a1);
+	 }
+ }
+ public int getAntalKassor(){
+	 return antalKassor;
+ }
+ public boolean isOpen() {
+	 return isOpen;
+ }
+ public void setOpen() {
+	 isOpen = true;
+ }
+ public void setClose() {
+	 isOpen = false;
+ }
+ public int getMaxCapacity() {
+	 return maxCapacity;
+ }
+ public int getCustomersInStore() {
+	 return customersInStore;
+ }
+ public void addCustomersInStore() {
+	 customersInStore += 1;
+ }
+ public void addTotalCustomers() {
+	 totalCustomers++;
+ }
+ public int getTotalCustomers() {
+	 return totalCustomers;
+ }
+ public void removeCustomersInStore() {
+	 customersInStore -= 1;
+ }
+ public int getCustomersDenied() {
+	 return customersDenied;
+ }
+ public int getClosingTime() {
+	 return closingTime;
+ }
+ public void addTimeKassaEmpty() {
+	 for(Kassa x: kassor) {
+		timeKassaEmpty += x.getTimeEmpty();
+		x.resetTime();
+	 }
+	 
+ }
+ public double getTimeKassaEmpty() {
+	 return timeKassaEmpty;
+ }
+ public void updateTime(double time) {
+	 currentTime = time;
+ }
+ public int getNrKassaEmpty() {
+	 int counter = 0;
+	 for(Kassa x : kassor) {
+		 if(x.isEmpty() == true) {
+			 counter++;
+		 }
+	 }
+	 return counter;
+ }
+ public double getCurrentTime() {
+	 return currentTime;
+ }
+}
