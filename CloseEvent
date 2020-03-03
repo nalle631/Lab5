@@ -10,11 +10,12 @@ public class CloseEvent extends Event{
 	private Supermarket s;
 	
 	public CloseEvent(Supermarket s) {
-		this.s = s;
+		this.s = s; 
 		super.happeningTime = s.getClosingTime();
 	}
 	
 	void effekt() {
+		s.updateTime(happeningTime);
 		s.setClose();
 		
 	}
@@ -23,3 +24,4 @@ public class CloseEvent extends Event{
 		return super.happeningTime;
 	}
 }
+
