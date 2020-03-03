@@ -17,8 +17,11 @@ public class Supermarket {
  private int totalCustomers;
  
  private double currentTime;
+ private double pastEventTime;
  
- private ArrayList <Kassa> kassor = new ArrayList<Kassa>();
+ private LinkedList <Customer> customerQueue;
+ 
+ private ArrayList <Kassa> kassor;
  private double timeKassaEmpty;
  
  
@@ -27,6 +30,9 @@ public class Supermarket {
 	 this.closingTime = closingTime;
 	 this.maxCapacity = maxCapacity;
 	 this.antalKassor = antalKassor;
+	 currentTime = 0;
+	 kassor = new ArrayList<Kassa>();
+	 customerQueue = new LinkedList<Customer>();
 	 for(int i = 0; i < antalKassor; i++) {
 		 Kassa a1 = new Kassa();
 		 kassor.add(a1);
@@ -40,6 +46,9 @@ public class Supermarket {
  }
  public void setOpen() {
 	 isOpen = true;
+ }
+ public LinkedList<Customer> getCustomerQueue() {
+	 return customerQueue;
  }
  public void setClose() {
 	 isOpen = false;
@@ -75,11 +84,16 @@ public class Supermarket {
 	 }
 	 
  }
+ public double getPastEventTime() {
+	 return pastEventTime;
+ }
  public double getTimeKassaEmpty() {
 	 return timeKassaEmpty;
  }
  public void updateTime(double time) {
+	 pastEventTime = currentTime;
 	 currentTime = time;
+	 
  }
  public int getNrKassaEmpty() {
 	 int counter = 0;
@@ -93,4 +107,5 @@ public class Supermarket {
  public double getCurrentTime() {
 	 return currentTime;
  }
+ 
 }
