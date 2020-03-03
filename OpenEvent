@@ -1,0 +1,14 @@
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
+public class OpenEvent extends Event {
+	public void effekt(){
+		Supermarket mySupermarket = new Supermarket(4, 10, 22);
+		mySupermarket.setOpen();
+	}
+}
