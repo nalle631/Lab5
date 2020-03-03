@@ -1,0 +1,11 @@
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
+abstract class Event {
+
+	State state;
+	abstract	void effekt();
+	abstract public double getTime();
+	
+}
