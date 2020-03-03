@@ -1,0 +1,25 @@
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
+public class CloseEvent extends Event{
+	private Supermarket s;
+	
+	public CloseEvent(Supermarket s) {
+		this.s = s;
+		super.happeningTime = s.getClosingTime();
+	}
+	
+	void effekt() {
+		s.setClose();
+		
+	}
+	public double getTime() {
+		
+		return super.happeningTime;
+	}
+}
