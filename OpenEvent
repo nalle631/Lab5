@@ -7,8 +7,17 @@
  *
  */
 public class OpenEvent extends Event {
+	private Supermarket mySupermarket;
+	private double happeningTime;
 	public void effekt(){
-		Supermarket mySupermarket = new Supermarket(4, 10, 22);
+		mySupermarket = new Supermarket(4, 10, 22);
 		mySupermarket.setOpen();
+		happeningTime = 0;
+	}
+
+	
+	public double getTime() {
+		
+		return happeningTime;
 	}
 }
