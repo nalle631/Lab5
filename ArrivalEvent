@@ -1,0 +1,52 @@
+/**
+ * 
+ * @author filipbergstrom, filber-9
+ *
+ */
+
+public class ArrivalEvent extends Event {
+	private Supermarket s;
+	private EventQueue eventQueue;
+	private double arrivalTime;
+	
+	
+	public ArrivalEvent(Supermarket s, EventQueue eventQueue, Customer customer, double arrivalTime) {
+		this.s = s;
+		this.arrivalTime = arrivalTime;
+		
+		// Här ska en customer skapas
+		// 
+		//
+		
+	}
+	
+	void effekt() {
+		s.updateTime(happeningTime);
+		s.addTimeInQueue(s.getCurrentTime(), s.getPastEventTime());
+		s.addKassaEmpty(s.getCurrentTime(), s.getPastEventTime());
+		
+		if (s.isOpen() == false) {									// Kollar om butiken är stängd
+			
+		}
+		
+		else {
+			if (s.getCustomersInStore() < s.getMaxCapacity()) {			// Kollar om butiken är full
+				s.addCustomersInStore();
+				s.addTotalCustomers();
+				
+				
+				eventQueue.addEvent(new ShoppingEvent(s, eventQueue, customer, s.getCurrentTime()));		//ska skapa event med customer 
+			}
+			
+			else {
+				s.addCustomersDenied();
+			}
+		}
+	}
+
+
+	public double getTime() {
+		return arrivalTime;
+	}
+
+}
