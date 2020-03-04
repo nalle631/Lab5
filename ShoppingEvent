@@ -48,5 +48,9 @@ public class ShoppingEvent extends Event {
 	public double getTime() {
 		return happeningTime;
 	}
+		
+	public int getCustomer() {
+		return customer.getCustomerNumber();
+	}
 
 }
