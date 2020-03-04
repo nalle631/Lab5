@@ -11,6 +11,7 @@ public class ShoppingEvent extends Event {
 	private UniformRandomStream randomTime;
 	private Kassa kassa;
 	private Customer customer;
+	private String eventName = "Shopping";
 	
 	public ShoppingEvent(Supermarket s, EventQueue eventQueue, Customer customer, double currentTime) {
 		this.s = s;
@@ -18,6 +19,9 @@ public class ShoppingEvent extends Event {
 		this.happeningTime = currentTime + randomTime.next();
 		this.customer = customer;
 		
+	}
+	public String getEventName() {
+		return eventName;
 	}
 	
 	void effekt() {
@@ -38,6 +42,7 @@ public class ShoppingEvent extends Event {
 		}
 		
 		else {
+			s.addTotalQueued();
 			s.addCustomerInQueue(customer);										// Om inte läggs personen i kön
 		}
 		
@@ -48,7 +53,7 @@ public class ShoppingEvent extends Event {
 	public double getTime() {
 		return happeningTime;
 	}
-		
+	
 	public int getCustomer() {
 		return customer.getCustomerNumber();
 	}
