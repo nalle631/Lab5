@@ -1,22 +1,9 @@
-public class CustomerQueue {
-	private LinkedList<Customer> customerQ = new LinkedList<Customer>();
+public class CustomerCreator {
+	private int customerNumber=0;
 	
-	public void add(Customer e) {
-		customerQ.add(e);
-	}
-	
-	public Customer getFirst() {
-		return customerQ.poll();
-	}
-	
-	public int getSize() {
-		return  customerQ.size();
-	}
-	
-	public boolean isEmpty() {
-		if(getSize()==0) {
-			return true;
-		}
-		return false;
+	public  CustomerCreator() {
+		new Customer(customerNumber);
+		customerNumber++;
 	}
 }
+
