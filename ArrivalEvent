@@ -8,15 +8,15 @@ public class ArrivalEvent extends Event {
 	private Supermarket s;
 	private EventQueue eventQueue;
 	private double arrivalTime;
-	
+	private Customer customer;
+	private CustomerCreator c;
 	
 	public ArrivalEvent(Supermarket s, EventQueue eventQueue, Customer customer, double arrivalTime) {
 		this.s = s;
 		this.arrivalTime = arrivalTime;
-		
-		// Här ska en customer skapas
-		// 
-		//
+	
+		customer = c.createCustomer();								// Här skapas en customer
+	
 		
 	}
 	
@@ -47,6 +47,10 @@ public class ArrivalEvent extends Event {
 
 	public double getTime() {
 		return arrivalTime;
+	}
+	
+	public int getCustomer() {
+		return customer.getCustomerNumber();
 	}
 
 }
