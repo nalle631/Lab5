@@ -16,7 +16,7 @@ public class EventQueue {
 		// kankse behövs ej då ad dmetod
 	}
 
-	public void add(Event e) {
+	public void addEvent(Event e) {
 		if (queue.size() == 0) {
 			queue.add(e);
 		} else {
