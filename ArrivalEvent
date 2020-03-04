@@ -10,14 +10,14 @@ public class ArrivalEvent extends Event {
 	private double arrivalTime;
 	private Customer customer;
 	private CustomerCreator c;
+	private String eventName = "Arrival";
 	
-	public ArrivalEvent(Supermarket s, EventQueue eventQueue, Customer customer, double arrivalTime) {
+	public ArrivalEvent(Supermarket s, EventQueue eventQueue, double arrivalTime) {
 		this.s = s;
 		this.arrivalTime = arrivalTime;
-	
+		
 		customer = c.createCustomer();								// Här skapas en customer
 	
-		
 	}
 	
 	void effekt() {
@@ -48,9 +48,11 @@ public class ArrivalEvent extends Event {
 	public double getTime() {
 		return arrivalTime;
 	}
+	public String getEventName() {
+		return eventName;
+	}
 	
 	public int getCustomer() {
 		return customer.getCustomerNumber();
 	}
-
 }
