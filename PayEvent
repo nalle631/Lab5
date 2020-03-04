@@ -10,12 +10,15 @@ public class PayEvent extends Event{
 	private Kassa currentKassa;
 	private double happeningTime;
 	private UniformRandomStream randomTime;
+	private Customer customer;
+	
 	
 	public PayEvent(Supermarket s, EventQueue eventQueue, Customer customer, double currentTime, Kassa currentKassa) {
 		this.s = s;
 		this.randomTime = new UniformRandomStream(0.5, 1.0, 1234);
 		this.happeningTime = currentTime + randomTime.next();
 		this.currentKassa = currentKassa;
+		this.customer = customer;
 		
 	}
 	
@@ -40,5 +43,8 @@ public class PayEvent extends Event{
 	public double getTime() {
 		return happeningTime;
 	}
-
+	
+	public int getCustomer() {
+		return customer.getCustomerNumber();
+	}
 }
