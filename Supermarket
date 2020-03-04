@@ -15,6 +15,7 @@ public class Supermarket {
  private int customersDenied;
  private int closingTime;
  private int totalCustomers;
+ private int moneyEarned;
  
  private double currentTime;
  private double pastEventTime;
@@ -23,6 +24,7 @@ public class Supermarket {
  
  private ArrayList <Kassa> kassor;
  private double timeKassaEmpty;
+ private double timeInQueue;
  
  
  public Supermarket(int antalKassor, int maxCapacity, int closingTime) {
@@ -31,6 +33,7 @@ public class Supermarket {
 	 this.maxCapacity = maxCapacity;
 	 this.antalKassor = antalKassor;
 	 currentTime = 0;
+	 timeInQueue = 0;
 	 kassor = new ArrayList<Kassa>();
 	 customerQueue = new LinkedList<Customer>();
 	 for(int i = 0; i < antalKassor; i++) {
@@ -53,12 +56,10 @@ public class Supermarket {
  public void setClose() {
 	 isOpen = false;
  }
- public int getMaxCapacity() {
-	 return maxCapacity;
- }
- public int getCustomersInStore() {
-	 return customersInStore;
- }
+ 
+ 
+ 
+ 
  public void addCustomersInStore() {
 	 customersInStore += 1;
  }
@@ -68,11 +69,42 @@ public class Supermarket {
  public void addCustomersDenied() {
 	 customersDenied++;
  }
- public int getTotalCustomers() {
-	 return totalCustomers;
+ public void addCustomerInQueue(Customer c) {
+	 customerQueue.add(c);
+ }
+ public void addKassaEmpty(double currentTime, double pastEventTime) {
+	 timeKassaEmpty += (currentTime - pastEventTime) * getNrKassaEmpty();
+ }
+ public void addTimeInQueue(double currentTime, double pastEventTime) {
+	 timeInQueue += (currentTime - pastEventTime) * customerQueue.size();
+ }
+ public void addTimeKassaEmpty() {
+	 for(Kassa x: kassor) {
+		timeKassaEmpty += x.getTimeEmpty();
+		x.resetTime();} 
+}
+ public void addMoneyEarned() {
+	 moneyEarned ++;
+ }
+ public ArrayList<Kassa> getKassor(){
+	 return kassor;
  }
  public void removeCustomersInStore() {
 	 customersInStore -= 1;
+ }
+ 
+ 
+ 
+ 
+ 
+ public int getMaxCapacity() {
+	 return maxCapacity;
+ }
+ public int getCustomersInStore() {
+	 return customersInStore;
+ }
+ public int getTotalCustomers() {
+	 return totalCustomers;
  }
  public int getCustomersDenied() {
 	 return customersDenied;
@@ -80,12 +112,14 @@ public class Supermarket {
  public int getClosingTime() {
 	 return closingTime;
  }
- public void addTimeKassaEmpty() {
-	 for(Kassa x: kassor) {
-		timeKassaEmpty += x.getTimeEmpty();
-		x.resetTime();
-	 }
-	 
+ public double getTimeInQueue() {
+	 return timeInQueue;
+ }
+ public int getMoneyEarned() {
+	 return moneyEarned;
+ }
+ public Customer getFirstCustomerInQueue() {
+	 return customerQueue.poll();
  }
  public double getPastEventTime() {
 	 return pastEventTime;
