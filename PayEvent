@@ -11,6 +11,7 @@ public class PayEvent extends Event{
 	private double happeningTime;
 	private UniformRandomStream randomTime;
 	private Customer customer;
+	private String eventName = "Pay";
 	
 	
 	public PayEvent(Supermarket s, EventQueue eventQueue, Customer customer, double currentTime, Kassa currentKassa) {
@@ -43,8 +44,12 @@ public class PayEvent extends Event{
 	public double getTime() {
 		return happeningTime;
 	}
+	String getEventName(){
+		return eventName;
+	}
 	
 	public int getCustomer() {
 		return customer.getCustomerNumber();
 	}
+
 }
