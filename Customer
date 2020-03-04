@@ -1,13 +1,12 @@
 public class Customer {
-	private long timeShopping;
-	private long timeInQue;
-	private long timeAtCheckOut;
+	private int customerNumb;
 	
-	private int custumNumb;
-	private boolean isShopping;
-	private boolean isInQue;
 	
 	public Customer(int n) {
-		this.custumNumb=n;
+		this.customerNumb=n;
+	}
+	
+	public int getCustomerNumber() {
+		return customerNumb;
 	}
 }
