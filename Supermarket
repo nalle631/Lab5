@@ -65,6 +65,9 @@ public class Supermarket {
  public void addTotalCustomers() {
 	 totalCustomers++;
  }
+ public void addCustomersDenied() {
+	 customersDenied++;
+ }
  public int getTotalCustomers() {
 	 return totalCustomers;
  }
