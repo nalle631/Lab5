@@ -21,6 +21,12 @@ public class Kassa {
 	 timeEmpty = 0;
 	 
  }
+ public void setFalse() {
+	 isEmpty = false;
+ }
+ public void setTrue() {
+	 isEmpty = true;
+ }
  public void addTimeEmpty(double currentTime, double eventTime){
 	 timeEmpty = eventTime - currentTime;
  }
