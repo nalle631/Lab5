@@ -6,8 +6,11 @@
  * @author Malte Olofsson, olomal-8
  *
  */
+
+
 public class CloseEvent extends Event{
 	private Supermarket s;
+	private String eventName = "Close";
 	
 	public CloseEvent(Supermarket s) {
 		this.s = s; 
@@ -19,9 +22,12 @@ public class CloseEvent extends Event{
 		s.setClose();
 		
 	}
+	
+	public String getEventName() {
+		return eventName;
+	}
 	public double getTime() {
 		
 		return super.happeningTime;
 	}
 }
-
