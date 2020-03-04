@@ -13,10 +13,14 @@ public class OpenEvent extends Event {
 	private CloseEvent closeEvent;
 	private ExponentialRandomStream randomArrival;
 	private ArrivalEvent arrivalEvent;
+	private String eventName = "Open";
+	private EventQueue eventQueue;
 	
 	public OpenEvent(Supermarket s, EventQueue eventQueue) {
 		this.mySupermarket = s;
 		happeningTime = 0;
+		this.eventQueue = eventQueue;
+		
 	}
 	public void effekt(){
 		
@@ -28,10 +32,13 @@ public class OpenEvent extends Event {
 		double arrivalTime = 0;
 		do { //Skapar alla arrivalEvents när butiken öppnar.
 			arrivalTime += randomArrival.next();
-			arrivalEvent = new ArrivalEvent(mySupermarket, arrivalTime, eventQueue);
-			eventQueue.addEvent(arrival);
+			arrivalEvent = new ArrivalEvent(mySupermarket, eventQueue, arrivalTime);
+			eventQueue.addEvent(arrivalEvent);
 		}while(arrivalTime < closingTime);
 		
+	}
+	String getEventName(){
+		return eventName;
 	}
 
 	
@@ -40,4 +47,3 @@ public class OpenEvent extends Event {
 		return happeningTime;
 	}
 }
-
