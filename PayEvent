@@ -1,0 +1,44 @@
+/**
+ * 
+ * @author filipbergstrom, filber-9
+ *
+ */
+
+public class PayEvent extends Event{
+	private Supermarket s;
+	private EventQueue eventQueue;
+	private Kassa currentKassa;
+	private double happeningTime;
+	private UniformRandomStream randomTime;
+	
+	public PayEvent(Supermarket s, EventQueue eventQueue, Customer customer, double currentTime, Kassa currentKassa) {
+		this.s = s;
+		this.randomTime = new UniformRandomStream(0.5, 1.0, 1234);
+		this.happeningTime = currentTime + randomTime.next();
+		this.currentKassa = currentKassa;
+		
+	}
+	
+	void effekt() {
+		s.updateTime(happeningTime);
+		s.addTimeInQueue(s.getCurrentTime(), s.getPastEventTime());
+		s.addKassaEmpty(s.getCurrentTime(), s.getPastEventTime());
+		
+		s.addMoneyEarned();
+		s.removeCustomersInStore();
+		currentKassa.setTrue();
+		
+		
+		
+		if (s.getCustomerQueue().size() > 0) {
+			eventQueue.addEvent(new PayEvent(s,eventQueue,s.getFirstCustomerInQueue(), happeningTime, currentKassa));
+		}
+		
+	}
+
+	
+	public double getTime() {
+		return happeningTime;
+	}
+
+}
