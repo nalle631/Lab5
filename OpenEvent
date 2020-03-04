@@ -9,10 +9,29 @@
 public class OpenEvent extends Event {
 	private Supermarket mySupermarket;
 	private double happeningTime;
-	public void effekt(){
-		mySupermarket = new Supermarket(4, 10, 22);
-		mySupermarket.setOpen();
+	private double closingTime;
+	private CloseEvent closeEvent;
+	private ExponentialRandomStream randomArrival;
+	private ArrivalEvent arrivalEvent;
+	
+	public OpenEvent(Supermarket s, EventQueue eventQueue) {
+		this.mySupermarket = s;
 		happeningTime = 0;
+	}
+	public void effekt(){
+		
+		mySupermarket.setOpen();
+		closingTime = mySupermarket.getClosingTime();
+		
+		closeEvent = new CloseEvent(mySupermarket); //Skapar ett closeEvent direkt när butiken öppnar
+		eventQueue.addEvent(closeEvent);
+		double arrivalTime = 0;
+		do { //Skapar alla arrivalEvents när butiken öppnar.
+			arrivalTime += randomArrival.next();
+			arrivalEvent = new ArrivalEvent(mySupermarket, arrivalTime, eventQueue);
+			eventQueue.addEvent(arrival);
+		}while(arrivalTime < closingTime);
+		
 	}
 
 	
@@ -21,3 +40,4 @@ public class OpenEvent extends Event {
 		return happeningTime;
 	}
 }
+
