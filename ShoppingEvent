@@ -1,0 +1,52 @@
+/**
+ * 
+ * @author filipbergstrom, filber-9
+ *
+ */
+
+public class ShoppingEvent extends Event {
+	private Supermarket s;
+	private EventQueue eventQueue;
+	private double happeningTime;
+	private UniformRandomStream randomTime;
+	private Kassa kassa;
+	private Customer customer;
+	
+	public ShoppingEvent(Supermarket s, EventQueue eventQueue, Customer customer, double currentTime) {
+		this.s = s;
+		this.randomTime = new UniformRandomStream(0.5, 1.0, 1234);
+		this.happeningTime = currentTime + randomTime.next();
+		this.customer = customer;
+		
+	}
+	
+	void effekt() {
+		s.updateTime(happeningTime);
+		s.addTimeInQueue(s.getCurrentTime(), s.getPastEventTime());
+		s.addKassaEmpty(s.getCurrentTime(), s.getPastEventTime());
+		
+		if (s.getNrKassaEmpty() > 0 && s.getCustomerQueue().size() == 0) {  // Kollar om någon kassa är tom samt om kön är tom
+			
+			for(Kassa k : s.getKassor()) {
+				if(k.isEmpty() == true) {
+					kassa = k;
+				}
+			}
+			
+			kassa.setFalse();
+			eventQueue.addEvent(new PayEvent(s, eventQueue, customer, happeningTime,kassa));						// om detta är fallet skapas ett nytt payevent
+		}
+		
+		else {
+			s.addCustomerInQueue(customer);										// Om inte läggs personen i kön
+		}
+		
+		
+	}
+
+	
+	public double getTime() {
+		return happeningTime;
+	}
+
+}
