@@ -1,33 +1,33 @@
-/**
- * 
- */
+
 
 /**
  * @author Malte Olofsson, olomal-8
  *
  */
-
-
-public class CloseEvent extends Event{
-	private Supermarket s;
-	private String eventName = "Close";
+public class StopEvent extends Event {
+	private double time;
+	private State s;
+	private String eventName;
 	
-	public CloseEvent(Supermarket s) {
-		this.s = s; 
-		super.happeningTime = s.getClosingTime();
+	public StopEvent(State s) {
+		time = 999;
+		this.s = s;
+		
+		
 	}
 	
 	void effekt() {
-		s.updateTime(happeningTime);
-		s.setClose();
+		s.turnOffSim();
 		
 	}
+
 	
+	public double getTime() {
+	
+		return time;
+	}
 	public String getEventName() {
 		return eventName;
 	}
-	public double getTime() {
-		
-		return super.happeningTime;
-	}
+
 }
