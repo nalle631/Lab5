@@ -1,9 +1,3 @@
-
-
-/**
- * @author Malte Olofsson, olomal-8
- *
- */
 public class StopEvent extends Event {
 	private double time;
 	private State s;
@@ -15,9 +9,10 @@ public class StopEvent extends Event {
 		
 		
 	}
-	
 	void effekt() {
-		s.turnOffSim();
+		
+		s.setCurrentEvent(this);
+		s.stop();
 		
 	}
 
@@ -28,6 +23,9 @@ public class StopEvent extends Event {
 	}
 	public String getEventName() {
 		return eventName;
+	}
+	public int getCustomerNr() {
+		return 0;
 	}
 
 }
