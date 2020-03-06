@@ -2,6 +2,7 @@ public class CloseEvent extends Event{
 	private Supermarket s;
 	private State state;
 	private String eventName = "Close";
+	private String eventNr;
 	
 	public CloseEvent(Supermarket s , State state) {
 		this.s = s; 
@@ -28,6 +29,6 @@ public class CloseEvent extends Event{
 	}
 
 	public int getCustomerNr() {
-		return 0;
+		return -1;
 	}
 }
