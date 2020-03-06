@@ -1,4 +1,12 @@
-public class RunSimulator {
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
+public class RunSim {
 	
 	
 	public static void main(String[] args) {
@@ -15,14 +23,15 @@ public class RunSimulator {
 		double upperPick = 1.0;
 		double lowerPay = 2.0;
 		double upperPay = 3.0;
-		Supermarket mySupermarket = new Supermarket(antalKassor,max,closingTime, seed,  lambda,  lowerPick
-				 , upperPick, lowerPay, upperPay);
-		
 		EventQueue eventQueue = new EventQueue();
+		Supermarket mySupermarket = new Supermarket(antalKassor,max,closingTime, seed,  lambda,  lowerPick
+				 , upperPick, lowerPay, upperPay,eventQueue);
+		
+		
 		State s = new State();
 		Event startEvent = new OpenEvent(mySupermarket, eventQueue , s);
 		View view = new SupermarketView(s, mySupermarket);
-		Simulator sim = new Simulator(s, eventQueue, startEvent, view);
+		Simulator sim = new Simulator(s, eventQueue, startEvent, view, mySupermarket);
 		sim.run();
 	}
 	
