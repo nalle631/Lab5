@@ -2,8 +2,8 @@ public class Customer {
 	private int customerNumb;
 	
 	
-	public Customer(int n) {
-		this.customerNumb=n;
+	public Customer(int ID) {
+		this.customerNumb = ID;
 	}
 	
 	public int getCustomerNumber() {
