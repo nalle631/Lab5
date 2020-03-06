@@ -1,0 +1,98 @@
+import java.text.DecimalFormat;
+import java.util.Observable;
+
+
+public class SupermarketView extends View {
+
+	private State state;
+	private Supermarket s;
+	private static DecimalFormat df2 = new DecimalFormat("#.##");
+	
+	
+	public SupermarketView(State state, Supermarket s) {
+		this.state = state;
+		this.s = s;
+		state.addObserver(this);
+		
+	}
+	
+	@Override
+	void firstPrint() {
+	System.out.println("PARAMETRAR");
+	System.out.println("==========");
+	System.out.println("Antal kassor, N..........: " + s.getAntalKassor());
+	System.out.println("Max som ryms, M..........: " + s.getMaxCapacity());
+	System.out.println("Ankomsthastighet, lambda.: " + s.getLambda());
+	System.out.println("Plocktider, [P_min..Pmax]: ["+ s.getLowerPick() + ".." + s.getUpperPick() + "]");
+	System.out.println("Betaltider, [K_min..Kmax]: ["+ s.getLowerPay() + ".." + s.getUpperPay() + "]");
+	System.out.println("Frö, f...................: " + s.getSeed());
+	System.out.println();
+	System.out.println("FÖRLOPP");
+	System.out.println("=======");
+	System.out.println("   Tid\tHändelse\tKund\t?\tled\tledT\tI\t$\t:-(\tköat\tköT\tköar\t[Kassakö..]");
+	System.out.println("  0,00\tStart");
+	}
+
+	void updatePrint() {
+		System.out.printf("%-7.5s %-12.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-20s\n  " ,
+				df2.format(state.getCurrentEvent().getTime()) ,
+				 state.getCurrentEvent().getEventName() ,
+				 state.getCurrentEvent().getCustomerNr() ,
+				 s.open() ,
+				 s.getNrKassaEmpty(),
+				 df2.format(s.getTimeKassaEmpty()) ,
+				 s.getCustomersInStore() ,
+				 s.getMoneyEarned() ,
+				s.getCustomersDenied(),
+				s.getTotalQueued(),
+				df2.format(s.getTimeInQueue()),
+				s.getCustomerQueue().size(),
+				queueString());
+		
+	}
+
+	void lastPrint() {
+		System.out.println(" 999,00\tStop");
+		System.out.println();
+		System.out.println("RESULTAT");
+		System.out.println("========");
+		System.out.println();
+		System.out.println("1) Av " + (s.getTotalCustomers()+s.getCustomersDenied()) + " kunder handlade " + s.getMoneyEarned() + " medan " +
+				s.getCustomersDenied() + " missades.");
+		System.out.println();
+		System.out.println("2) Total tid " + s.getAntalKassor() + " kassor varit lediga: " + 
+		df2.format(s.getTimeKassaEmpty()) + 
+				" te.");
+		System.out.println("   Genomsnittlig ledig kassatid: " + 
+				df2.format((s.getTimeKassaEmpty()/s.getAntalKassor())) + " te (dvs "
+				+ df2.format(((s.getTimeKassaEmpty()/s.getAntalKassor())/s.getFinalEventTime())*100) + 
+				"% av tiden från öppning tills "
+				+ "sista kunden betalat).");
+		System.out.println();
+		System.out.println("3) Total tid " + s.getTotalQueued() + 
+				" kunder tvingats köa: " + df2.format(s.getTimeInQueue()) + " te.");
+		System.out.println("   Genomsnittli kötid: " + df2.format(s.getTimeInQueue()/s.getTotalQueued()) + " te.");
+		
+		
+	}
+
+	public void update(Observable o, Object arg) {
+		updatePrint();
+		
+	}
+	public String queueString() {
+		String string = "[";
+		for(Customer x: s.getCustomerQueue()) {
+			if(string.length() == 1) {
+				string += x.getCustomerNumber();
+			}else {
+				string += "," + x.getCustomerNumber();
+			}
+			
+			
+		}
+		return string + "]";
+		
+	}
+
+}
