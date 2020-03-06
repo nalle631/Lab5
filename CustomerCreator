@@ -2,12 +2,9 @@ public class CustomerCreator {
 	private int customerNumber=0;
 	private Customer c;
 	
-	public  CustomerCreator() {
+	public Customer newCustomer() {
 		c = new Customer(customerNumber);
-		customerNumber++;
-	}
-	
-	public Customer createCustomer() {
+		customerNumber+=1;
 		return c;
 	}
 }
