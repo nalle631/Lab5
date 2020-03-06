@@ -1,3 +1,11 @@
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
 public class ArrivalEvent extends Event {
 	private Supermarket s;
 	private EventQueue eventQueue;
@@ -6,53 +14,55 @@ public class ArrivalEvent extends Event {
 	private CustomerCreator c;
 	private String eventName = "Arrival";
 	private State state;
-	
-	
+
 	public ArrivalEvent(Supermarket s, EventQueue eventQueue, double arrivalTime, State state) {
 		this.s = s;
 		this.arrivalTime = arrivalTime;
 		this.state = state;
 		customer = s.createCustomer();
 		this.eventQueue = eventQueue;
-	
+
 	}
-	
+
 	void effekt() {
-		
-		state.setCurrentEvent(this);
+
 		s.updateTime(arrivalTime);
-		s.addTimeInQueue(s.getCurrentTime(), s.getPastEventTime());
-		s.addKassaEmpty(s.getCurrentTime(), s.getPastEventTime());
-		
-		if (s.isOpen() == false) {									// Kollar om butiken är stängd
-			
+		if (s.isOpen()) {
+			s.addTimeInQueue(s.getCurrentTime(), s.getPastEventTime());
+			s.addKassaEmpty(s.getCurrentTime(), s.getPastEventTime());
 		}
-		
+		state.setCurrentEvent(this);
+
+		if (s.isOpen() == false) { // Kollar om butiken är stängd
+
+		}
+
 		else {
-			if (s.getCustomersInStore() < s.getMaxCapacity()) {			// Kollar om butiken är full
+			if (s.getCustomersInStore() < s.getMaxCapacity()) { // Kollar om butiken är full
 				s.addCustomersInStore();
 				s.addTotalCustomers();
-			
+
 				double pickTime = this.arrivalTime + s.getPickTime().next();
-				
-				eventQueue.addEvent(new ShoppingEvent(s, eventQueue, customer, pickTime, state));		//ska skapa event med customer 
+
+				eventQueue.addEvent(new ShoppingEvent(s, eventQueue, customer, pickTime, state)); // ska skapa event med
+																																// customer
 			}
-			
+
 			else {
 				s.addCustomersDenied();
 			}
 		}
-		
-	}
 
+	}
 
 	public double getTime() {
 		return arrivalTime;
 	}
+
 	public String getEventName() {
 		return eventName;
 	}
-	
+
 	public int getCustomerNr() {
 		return customer.getCustomerNumber();
 	}
