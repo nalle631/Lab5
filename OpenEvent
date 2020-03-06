@@ -1,11 +1,3 @@
-/**
- * 
- */
-
-/**
- * @author Malte Olofsson, olomal-8
- *
- */
 public class OpenEvent extends Event {
 	private Supermarket mySupermarket;
 	private double happeningTime;
@@ -15,29 +7,34 @@ public class OpenEvent extends Event {
 	private ArrivalEvent arrivalEvent;
 	private String eventName = "Open";
 	private EventQueue eventQueue;
+	private State state;
 	
-	public OpenEvent(Supermarket s, EventQueue eventQueue) {
+	public OpenEvent(Supermarket s, EventQueue eventQueue, State state) {
 		this.mySupermarket = s;
 		happeningTime = 0;
 		this.eventQueue = eventQueue;
-		
+		this.state = state;
 	}
 	public void effekt(){
-		
+		state.setCurrentEvent(this);
 		mySupermarket.setOpen();
 		closingTime = mySupermarket.getClosingTime();
 		
-		closeEvent = new CloseEvent(mySupermarket); //Skapar ett closeEvent direkt när butiken öppnar
+		closeEvent = new CloseEvent(mySupermarket, state); //Skapar ett closeEvent direkt när butiken öppnar
 		eventQueue.addEvent(closeEvent);
 		double arrivalTime = 0;
-		do { //Skapar alla arrivalEvents när butiken öppnar.
-			arrivalTime += randomArrival.next();
-			arrivalEvent = new ArrivalEvent(mySupermarket, eventQueue, arrivalTime);
+		
+		randomArrival = new ExponentialRandomStream(mySupermarket.getLambda(), mySupermarket.getSeed());
+		while(arrivalTime < closingTime) { //Skapar alla arrivalEvents när butiken öppnar.
+			
+			
+			arrivalTime += mySupermarket.getArrivalTime();
+			arrivalEvent = new ArrivalEvent(mySupermarket, eventQueue, arrivalTime, state);
 			eventQueue.addEvent(arrivalEvent);
-		}while(arrivalTime < closingTime);
+		}
 		
 	}
-	String getEventName(){
+	public String getEventName(){
 		return eventName;
 	}
 
@@ -45,5 +42,8 @@ public class OpenEvent extends Event {
 	public double getTime() {
 		
 		return happeningTime;
+	}
+	public int getCustomerNr() {
+		return 0;
 	}
 }
