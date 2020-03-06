@@ -1,148 +1,220 @@
-/**
- * 
- */
-import java.util.*;
-/**
- * @author Malte Olofsson, olomal-8
- *
- */
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class Supermarket {
- private boolean isOpen;
- private int antalKassor;
- private int maxCapacity;
- 
- private int customersInStore;
- private int customersDenied;
- private int closingTime;
- private int totalCustomers;
- private int moneyEarned;
- 
- private double currentTime;
- private double pastEventTime;
- 
- private LinkedList <Customer> customerQueue;
- 
- private ArrayList <Kassa> kassor;
- private double timeKassaEmpty;
- private double timeInQueue;
- 
- 
- public Supermarket(int antalKassor, int maxCapacity, int closingTime) {
-	 isOpen = false;
-	 this.closingTime = closingTime;
-	 this.maxCapacity = maxCapacity;
-	 this.antalKassor = antalKassor;
-	 currentTime = 0;
-	 timeInQueue = 0;
-	 kassor = new ArrayList<Kassa>();
-	 customerQueue = new LinkedList<Customer>();
-	 for(int i = 0; i < antalKassor; i++) {
-		 Kassa a1 = new Kassa();
-		 kassor.add(a1);
-	 }
- }
- public int getAntalKassor(){
-	 return antalKassor;
- }
- public boolean isOpen() {
-	 return isOpen;
- }
- public void setOpen() {
-	 isOpen = true;
- }
- public LinkedList<Customer> getCustomerQueue() {
-	 return customerQueue;
- }
- public void setClose() {
-	 isOpen = false;
- }
- 
- 
- 
- 
- public void addCustomersInStore() {
-	 customersInStore += 1;
- }
- public void addTotalCustomers() {
-	 totalCustomers++;
- }
- public void addCustomersDenied() {
-	 customersDenied++;
- }
- public void addCustomerInQueue(Customer c) {
-	 customerQueue.add(c);
- }
- public void addKassaEmpty(double currentTime, double pastEventTime) {
-	 timeKassaEmpty += (currentTime - pastEventTime) * getNrKassaEmpty();
- }
- public void addTimeInQueue(double currentTime, double pastEventTime) {
-	 timeInQueue += (currentTime - pastEventTime) * customerQueue.size();
- }
- public void addTimeKassaEmpty() {
-	 for(Kassa x: kassor) {
-		timeKassaEmpty += x.getTimeEmpty();
-		x.resetTime();} 
-}
- public void addMoneyEarned() {
-	 moneyEarned ++;
- }
- public ArrayList<Kassa> getKassor(){
-	 return kassor;
- }
- public void removeCustomersInStore() {
-	 customersInStore -= 1;
- }
- 
- 
- 
- 
- 
- public int getMaxCapacity() {
-	 return maxCapacity;
- }
- public int getCustomersInStore() {
-	 return customersInStore;
- }
- public int getTotalCustomers() {
-	 return totalCustomers;
- }
- public int getCustomersDenied() {
-	 return customersDenied;
- }
- public int getClosingTime() {
-	 return closingTime;
- }
- public double getTimeInQueue() {
-	 return timeInQueue;
- }
- public int getMoneyEarned() {
-	 return moneyEarned;
- }
- public Customer getFirstCustomerInQueue() {
-	 return customerQueue.poll();
- }
- public double getPastEventTime() {
-	 return pastEventTime;
- }
- public double getTimeKassaEmpty() {
-	 return timeKassaEmpty;
- }
- public void updateTime(double time) {
-	 pastEventTime = currentTime;
-	 currentTime = time;
+	 private boolean isOpen;
+	 private int antalKassor;
+	 private int maxCapacity;
 	 
- }
- public int getNrKassaEmpty() {
-	 int counter = 0;
-	 for(Kassa x : kassor) {
-		 if(x.isEmpty() == true) {
-			 counter++;
+	 private int customersInStore;
+	 private int customersDenied;
+	 private double closingTime;
+	 private int totalCustomers;
+	 private int moneyEarned;
+	 private int totalQueued;
+	 private UniformRandomStream pickTime;
+	 private UniformRandomStream payTime;
+	 private ExponentialRandomStream arrivalTime;
+	 
+	 private double currentTime;
+	 private double pastEventTime;
+	 
+	 private LinkedList <Customer> customerQueue;
+	 
+	 private ArrayList <Kassa> kassor;
+	 private double timeKassaEmpty;
+	 private double timeInQueue;
+	 
+	 private long seed;
+	 private double lambda;
+	 private double lowerPick;
+	 private double upperPick;
+	 private double lowerPay;
+	 private double upperPay;
+	 private double finalEventTime;
+	 private CustomerCreator customerCreator;
+	 
+	 
+	 public Supermarket(int antalKassor, int maxCapacity, double closingTime, long seed, double lambda, double lowerPick
+			 ,double upperPick, double lowerPay, double upperPay) {
+		 isOpen = false;
+		 this.closingTime = closingTime;
+		 this.maxCapacity = maxCapacity;
+		 this.antalKassor = antalKassor;
+		 this.seed = seed;
+		 this.lambda = lambda;
+		 this.lowerPick = lowerPick;
+		 this.upperPick = upperPick;
+		 this.lowerPay = lowerPay;
+		 this.upperPay = upperPay;
+		 currentTime = 0;
+		 timeInQueue = 0;
+		 customerCreator = new CustomerCreator(); 
+		 totalQueued=0;
+		 arrivalTime = new ExponentialRandomStream(lambda,seed);
+		 payTime = new UniformRandomStream(lowerPay,upperPay,seed);
+		 pickTime = new UniformRandomStream(lowerPick,upperPick,seed);
+		 kassor = new ArrayList<Kassa>();
+		 customerQueue = new LinkedList<Customer>();
+		 for(int i = 0; i < antalKassor; i++) {
+			 Kassa a1 = new Kassa();
+			 kassor.add(a1);
 		 }
 	 }
-	 return counter;
- }
- public double getCurrentTime() {
-	 return currentTime;
- }
- 
-}
+	 public int getAntalKassor(){
+		 return antalKassor;
+	 }
+	 public boolean isOpen() {
+		 
+		 return isOpen;
+	 }
+	 public String open() {
+		 if(isOpen == true) {
+			 return "Ö";
+		 }else {
+			 return "S";
+		 }
+	 }
+	 public void setOpen() {
+		 isOpen = true;
+	 }
+	 public LinkedList<Customer> getCustomerQueue() {
+		 return customerQueue;
+	 }
+	 public void setClose() {
+		 isOpen = false;
+	 }
+	 
+	 public int getTotalQueued() {
+		 return totalQueued;
+	 }
+	 
+	 
+	 public void addCustomersInStore() {
+		 customersInStore += 1;
+	 }
+	 public void addTotalCustomers() {
+		 totalCustomers++;
+	 }
+	 public void addCustomersDenied() {
+		 customersDenied++;
+	 }
+	 public void addCustomerInQueue(Customer c) {
+		 customerQueue.add(c);
+	 }
+	 public void addTotalQueued() {
+		 totalQueued++;
+	 }
+	 public void addKassaEmpty(double currentTime, double pastEventTime) {
+		 timeKassaEmpty += (currentTime - pastEventTime) * getNrKassaEmpty();
+	 }
+	 public void addTimeInQueue(double currentTime, double pastEventTime) {
+		 timeInQueue += (currentTime - pastEventTime) * customerQueue.size();
+	 }
+	 public void addTimeKassaEmpty() {
+		 for(Kassa x: kassor) {
+			timeKassaEmpty += x.getTimeEmpty();
+			x.resetTime();} 
+	}
+	 public void addMoneyEarned() {
+		 moneyEarned ++;
+	 }
+	 public ArrayList<Kassa> getKassor(){
+		 return kassor;
+	 }
+	 public void removeCustomersInStore() {
+		 customersInStore -= 1;
+	 }
+	 
+	 
+	 
+	 
+	 public Customer createCustomer() {
+		 Customer customer = customerCreator.newCustomer();
+		 return customer;
+	 }
+	 public int getMaxCapacity() {
+		 return maxCapacity;
+	 }
+	 public int getCustomersInStore() {
+		 return customersInStore;
+	 }
+	 public int getTotalCustomers() {
+		 return totalCustomers;
+	 }
+	 public int getCustomersDenied() {
+		 return customersDenied;
+	 }
+	 public double getClosingTime() {
+		 return closingTime;
+	 }
+	 public double getTimeInQueue() {
+		 return timeInQueue;
+	 }
+	 public int getMoneyEarned() {
+		 return moneyEarned;
+	 }
+	 public Customer getFirstCustomerInQueue() {
+		 return customerQueue.poll();
+	 }
+	 public double getPastEventTime() {
+		 return pastEventTime;
+	 }
+	 public double getTimeKassaEmpty() {
+		 return timeKassaEmpty;
+	 }
+	 public void updateTime(double time) {
+		 pastEventTime = currentTime;
+		 currentTime = time;
+		 
+	 }
+	 public int getNrKassaEmpty() {
+		 int counter = 0;
+		 for(Kassa x : kassor) {
+			 if(x.isEmpty() == true) {
+				 counter++;
+			 }
+		 }
+		 return counter;
+	 }
+	 public double getCurrentTime() {
+		 return currentTime;
+	 }
+	public long getSeed() {
+		return seed;
+	}
+	public double getLambda() {
+		return lambda;
+	}
+	public double getLowerPick() {
+		return lowerPick;
+	}
+	public double getUpperPick() {
+		return upperPick;
+	}
+	public double getLowerPay() {
+		return lowerPay;
+	}
+	public double getUpperPay() {
+		return upperPay;
+	}
+	public double getFinalEventTime() {
+		return finalEventTime;
+	}
+	public void setFinalEventTime(double finalEventTime) {
+		this.finalEventTime = finalEventTime;
+	}
+	public UniformRandomStream getPickTime() {
+		
+		return pickTime;
+	}
+	public UniformRandomStream getPayTime() {
+		
+		return payTime;
+	}
+	public double getArrivalTime() {
+		
+		return arrivalTime.next();
+	}
+	 
+	}
