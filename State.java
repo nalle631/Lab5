@@ -1,3 +1,11 @@
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
 import java.util.Observable;
 
 public class State extends Observable {
@@ -59,4 +67,3 @@ public class State extends Observable {
 		//
 		
 	}
-
