@@ -1,36 +1,28 @@
-/**
- * 
- */
-
-/**
- * @author Malte Olofsson, olomal-8
- *
- */
 public class Kassa {
- private boolean isEmpty;
- private double timeEmpty;
- 
- public Kassa() {
-	 isEmpty = true;
-	 timeEmpty = 0;
- }
- public double getTimeEmpty() {
-	 return timeEmpty;
- }
- public void resetTime() {
-	 timeEmpty = 0;
+	 private boolean isEmpty;
+	 private double timeEmpty;
 	 
- }
- public void setFalse() {
-	 isEmpty = false;
- }
- public void setTrue() {
-	 isEmpty = true;
- }
- public void addTimeEmpty(double currentTime, double eventTime){
-	 timeEmpty = eventTime - currentTime;
- }
- public boolean isEmpty() {
-	 return isEmpty;
- }
-}
+	 public Kassa() {
+		 isEmpty = true;
+		 timeEmpty = 0;
+	 }
+	 public double getTimeEmpty() {
+		 return timeEmpty;
+	 }
+	 public void resetTime() {
+		 timeEmpty = 0;
+		 
+	 }
+	 public void setFalse() {
+		 isEmpty = false;
+	 }
+	 public void setTrue() {
+		 isEmpty = true;
+	 }
+	 public void addTimeEmpty(double currentTime, double eventTime){
+		 timeEmpty = eventTime - currentTime;
+	 }
+	 public boolean isEmpty() {
+		 return isEmpty;
+	 }
+	}
