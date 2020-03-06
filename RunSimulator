@@ -1,0 +1,29 @@
+public class RunSimulator {
+	
+	
+	public static void main(String[] args) {
+		
+		
+		int antalKassor = 2;
+		int max = 5;
+		double closingTime = 10.0;
+		long seed = 1234;
+		
+		double lambda = 1.0;
+		double lowerPick = 0.5;
+		 
+		double upperPick = 1.0;
+		double lowerPay = 2.0;
+		double upperPay = 3.0;
+		Supermarket mySupermarket = new Supermarket(antalKassor,max,closingTime, seed,  lambda,  lowerPick
+				 , upperPick, lowerPay, upperPay);
+		
+		EventQueue eventQueue = new EventQueue();
+		State s = new State();
+		Event startEvent = new OpenEvent(mySupermarket, eventQueue , s);
+		View view = new SupermarketView(s, mySupermarket);
+		Simulator sim = new Simulator(s, eventQueue, startEvent, view);
+		sim.run();
+	}
+	
+}
