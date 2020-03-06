@@ -1,29 +1,41 @@
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
+
 public class Simulator {
 	private State s;
 	private EventQueue eventQueue;
 	private Event event;
 	private View view;
 	private StopEvent stopEvent;
-	
-	public Simulator(State s, EventQueue eventQueue, Event event, View view) {
-		this.s=s;
-		this.eventQueue=eventQueue;
-		this.event=event;
-		this.view=view;
-		stopEvent = new StopEvent(s);
+
+	public Simulator(State s, EventQueue eventQueue, Event event, View view, Supermarket shop) {
+		this.s = s;
+		this.eventQueue = eventQueue;
+		this.event = event;
+		this.view = view;
+		stopEvent = new StopEvent(s, shop);
 	}
-	
+
 	public void run() {
-		view.firstPrint();
-		
+
 		eventQueue.addEvent(event);
-		
+
 		eventQueue.addEvent(stopEvent);
-		
-		while(s.getActiveSim() == true) {
+
+		while (s.getActiveSim() == true) {
 			Event event = eventQueue.getFirst();
 			event.effekt();
+			if (s.getCurrentEvent().getClass() == OpenEvent.class) {
+				view.firstPrint();
+			}else if(s.getCurrentEvent().getClass() == StopEvent.class) {
+				view.lastPrint();
+			}
 		}
-		view.lastPrint();
 	}
 }
