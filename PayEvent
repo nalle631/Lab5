@@ -1,59 +1,57 @@
-public class PayEvent extends Event{
-	private Supermarket s;
-	private EventQueue eventQueue;
-	private Kassa currentKassa;
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
+public class OpenEvent extends Event {
+	private Supermarket mySupermarket;
 	private double happeningTime;
-	private UniformRandomStream randomTime;
-	private Customer customer;
-	private String eventName = "Pay";
-	private State  state;
+	private double closingTime;
+	private CloseEvent closeEvent;
+	private ExponentialRandomStream randomArrival;
+	private ArrivalEvent arrivalEvent;
+	private String eventName = "Open";
+	private EventQueue eventQueue;
+	private State state;
 	
-	
-	public PayEvent(Supermarket s, EventQueue eventQueue, Customer customer, double currentTime, Kassa currentKassa, State state) {
-		this.s = s;
-		
-		this.happeningTime = currentTime;
-		this.currentKassa = currentKassa;
-		this.customer = customer;
-		this.state = state;
+	public OpenEvent(Supermarket s, EventQueue eventQueue, State state) {
+		this.mySupermarket = s;
+		happeningTime = 0;
 		this.eventQueue = eventQueue;
-		
+		this.state = state;
 	}
-	
-	void effekt() {
+	public void effekt(){
 		state.setCurrentEvent(this);
-		s.updateTime(happeningTime);
-		s.addTimeInQueue(s.getCurrentTime(), s.getPastEventTime());
-		s.addKassaEmpty(s.getCurrentTime(), s.getPastEventTime());
+		mySupermarket.setOpen();
+		closingTime = mySupermarket.getClosingTime();
 		
-		s.addMoneyEarned();
-		s.removeCustomersInStore();
+		closeEvent = new CloseEvent(mySupermarket, state); //Skapar ett closeEvent direkt när butiken öppnar
+		eventQueue.addEvent(closeEvent);
+		double arrivalTime = 0;
 		
-		
-		
-		
-		if (s.getCustomerQueue().size() > 0) {
-			Customer c1 = s.getFirstCustomerInQueue();
-			eventQueue.addEvent(new PayEvent(s,eventQueue,c1, happeningTime+s.getPayTime().next(), currentKassa, state));
-		} else {
-			currentKassa.setTrue();
+		randomArrival = new ExponentialRandomStream(mySupermarket.getLambda(), mySupermarket.getSeed());
+		while(arrivalTime < closingTime) { //Skapar alla arrivalEvents när butiken öppnar.
+			
+			
+			arrivalTime += mySupermarket.getArrivalTime();
+			arrivalEvent = new ArrivalEvent(mySupermarket, eventQueue, arrivalTime, state);
+			eventQueue.addEvent(arrivalEvent);
 		}
 		
-		s.setFinalEventTime(happeningTime);
-		
-		
-	}
-
-	
-	public double getTime() {
-		return happeningTime;
 	}
 	public String getEventName(){
 		return eventName;
 	}
-	
-	public int getCustomerNr() {
-		return customer.getCustomerNumber();
-	}
 
+	
+	public double getTime() {
+		
+		return happeningTime;
+	}
+	public int getCustomerNr() {
+		return 0;
+	}
 }
