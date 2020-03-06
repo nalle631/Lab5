@@ -1,0 +1,9 @@
+import java.util.Observer;
+
+abstract class View implements Observer{
+	 
+	 abstract void firstPrint();
+	 abstract void updatePrint();
+	 abstract void lastPrint();
+	 
+}
