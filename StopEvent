@@ -1,16 +1,24 @@
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
+  
 public class StopEvent extends Event {
 	private double time;
 	private State s;
+	private Supermarket shop;
 	private String eventName;
 	
-	public StopEvent(State s) {
+	public StopEvent(State s, Supermarket shop) {
 		time = 999;
 		this.s = s;
+		this.shop = shop;
 		
 		
 	}
 	void effekt() {
 		
+//		shop.fixLastKassaEmptyTime();
 		s.setCurrentEvent(this);
 		s.stop();
 		
