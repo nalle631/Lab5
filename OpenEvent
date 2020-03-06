@@ -1,3 +1,11 @@
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
 public class OpenEvent extends Event {
 	private Supermarket mySupermarket;
 	private double happeningTime;
