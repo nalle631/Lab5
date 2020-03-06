@@ -1,9 +1,3 @@
-/**
- * 
- * @author filipbergstrom, filber-9
- *
- */
-
 public class ArrivalEvent extends Event {
 	private Supermarket s;
 	private EventQueue eventQueue;
@@ -11,17 +5,22 @@ public class ArrivalEvent extends Event {
 	private Customer customer;
 	private CustomerCreator c;
 	private String eventName = "Arrival";
+	private State state;
 	
-	public ArrivalEvent(Supermarket s, EventQueue eventQueue, double arrivalTime) {
+	
+	public ArrivalEvent(Supermarket s, EventQueue eventQueue, double arrivalTime, State state) {
 		this.s = s;
 		this.arrivalTime = arrivalTime;
-		
-		customer = c.createCustomer();								// Här skapas en customer
+		this.state = state;
+		customer = s.createCustomer();
+		this.eventQueue = eventQueue;
 	
 	}
 	
 	void effekt() {
-		s.updateTime(happeningTime);
+		
+		state.setCurrentEvent(this);
+		s.updateTime(arrivalTime);
 		s.addTimeInQueue(s.getCurrentTime(), s.getPastEventTime());
 		s.addKassaEmpty(s.getCurrentTime(), s.getPastEventTime());
 		
@@ -33,15 +32,17 @@ public class ArrivalEvent extends Event {
 			if (s.getCustomersInStore() < s.getMaxCapacity()) {			// Kollar om butiken är full
 				s.addCustomersInStore();
 				s.addTotalCustomers();
+			
+				double pickTime = this.arrivalTime + s.getPickTime().next();
 				
-				
-				eventQueue.addEvent(new ShoppingEvent(s, eventQueue, customer, s.getCurrentTime()));		//ska skapa event med customer 
+				eventQueue.addEvent(new ShoppingEvent(s, eventQueue, customer, pickTime, state));		//ska skapa event med customer 
 			}
 			
 			else {
 				s.addCustomersDenied();
 			}
 		}
+		
 	}
 
 
@@ -52,7 +53,7 @@ public class ArrivalEvent extends Event {
 		return eventName;
 	}
 	
-	public int getCustomer() {
+	public int getCustomerNr() {
 		return customer.getCustomerNumber();
 	}
 }
