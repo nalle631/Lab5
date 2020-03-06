@@ -1,9 +1,3 @@
-/**
- * 
- * @author filipbergstrom, filber-9
- *
- */
-
 public class PayEvent extends Event{
 	private Supermarket s;
 	private EventQueue eventQueue;
@@ -12,31 +6,41 @@ public class PayEvent extends Event{
 	private UniformRandomStream randomTime;
 	private Customer customer;
 	private String eventName = "Pay";
+	private State  state;
 	
 	
-	public PayEvent(Supermarket s, EventQueue eventQueue, Customer customer, double currentTime, Kassa currentKassa) {
+	public PayEvent(Supermarket s, EventQueue eventQueue, Customer customer, double currentTime, Kassa currentKassa, State state) {
 		this.s = s;
-		this.randomTime = new UniformRandomStream(0.5, 1.0, 1234);
-		this.happeningTime = currentTime + randomTime.next();
+		
+		this.happeningTime = currentTime;
 		this.currentKassa = currentKassa;
 		this.customer = customer;
+		this.state = state;
+		this.eventQueue = eventQueue;
 		
 	}
 	
 	void effekt() {
+		state.setCurrentEvent(this);
 		s.updateTime(happeningTime);
 		s.addTimeInQueue(s.getCurrentTime(), s.getPastEventTime());
 		s.addKassaEmpty(s.getCurrentTime(), s.getPastEventTime());
 		
 		s.addMoneyEarned();
 		s.removeCustomersInStore();
-		currentKassa.setTrue();
+		
 		
 		
 		
 		if (s.getCustomerQueue().size() > 0) {
-			eventQueue.addEvent(new PayEvent(s,eventQueue,s.getFirstCustomerInQueue(), happeningTime, currentKassa));
+			Customer c1 = s.getFirstCustomerInQueue();
+			eventQueue.addEvent(new PayEvent(s,eventQueue,c1, happeningTime+s.getPayTime().next(), currentKassa, state));
+		} else {
+			currentKassa.setTrue();
 		}
+		
+		s.setFinalEventTime(happeningTime);
+		
 		
 	}
 
@@ -44,11 +48,11 @@ public class PayEvent extends Event{
 	public double getTime() {
 		return happeningTime;
 	}
-	String getEventName(){
+	public String getEventName(){
 		return eventName;
 	}
 	
-	public int getCustomer() {
+	public int getCustomerNr() {
 		return customer.getCustomerNumber();
 	}
 
