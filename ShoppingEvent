@@ -1,3 +1,11 @@
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
 public class ShoppingEvent extends Event {
 	private Supermarket s;
 	private EventQueue eventQueue;
@@ -22,10 +30,11 @@ public class ShoppingEvent extends Event {
 	}
 	
 	void effekt() {
-		state.setCurrentEvent(this);
+		
 		s.updateTime(happeningTime);
 		s.addTimeInQueue(s.getCurrentTime(), s.getPastEventTime());
 		s.addKassaEmpty(s.getCurrentTime(), s.getPastEventTime());
+		state.setCurrentEvent(this);
 		
 		if (s.getNrKassaEmpty() > 0 && s.getCustomerQueue().size() == 0) {  // Kollar om någon kassa är tom samt om kön är tom
 			
