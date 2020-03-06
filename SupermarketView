@@ -1,3 +1,11 @@
+/**
+ * 
+ */
+
+/**
+ * @author Malte Olofsson, olomal-8
+ *
+ */
 import java.text.DecimalFormat;
 import java.util.Observable;
 
@@ -29,12 +37,12 @@ public class SupermarketView extends View {
 	System.out.println();
 	System.out.println("FÖRLOPP");
 	System.out.println("=======");
-	System.out.println("   Tid\tHändelse\tKund\t?\tled\tledT\tI\t$\t:-(\tköat\tköT\tköar\t[Kassakö..]");
-	System.out.println("  0,00\tStart");
+	System.out.println("  Tid\tHändelse\tKund\t?\tled\tledT\tI\t$\t:-(\tköat\tköT\tköar\t[Kassakö..]");
+	System.out.println("0,00\t   Start");
 	}
 
 	void updatePrint() {
-		System.out.printf("%-7.5s %-12.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-20s\n  " ,
+		System.out.printf(  "%-10s %-12.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-7.5s %-20s\n" ,
 				df2.format(state.getCurrentEvent().getTime()) ,
 				 state.getCurrentEvent().getEventName() ,
 				 state.getCurrentEvent().getCustomerNr() ,
@@ -52,7 +60,7 @@ public class SupermarketView extends View {
 	}
 
 	void lastPrint() {
-		System.out.println(" 999,00\tStop");
+		System.out.println("999,00     Stop");
 		System.out.println();
 		System.out.println("RESULTAT");
 		System.out.println("========");
@@ -77,7 +85,10 @@ public class SupermarketView extends View {
 	}
 
 	public void update(Observable o, Object arg) {
-		updatePrint();
+		if(state.getCurrentEvent().getClass() != OpenEvent.class && state.getCurrentEvent().getClass() !=StopEvent.class) {
+			updatePrint();
+		}
+		
 		
 	}
 	public String queueString() {
