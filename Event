@@ -1,12 +1,8 @@
-/**
- * @author Malte Olofsson, olomal-8
- *
- */
 abstract class Event {
-	
 	protected double happeningTime;
-	State state;
-	abstract	void effekt();
-	abstract public double getTime();
 	
+	abstract void effekt();
+	abstract public double getTime();
+	abstract public String getEventName();
+	abstract public int getCustomerNr();
 }
