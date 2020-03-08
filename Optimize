@@ -1,0 +1,104 @@
+import java.util.Random;
+
+import Event.Event;
+import Event.EventQueue;
+import Event.OpenEvent;
+import Event.State;
+import Event.Supermarket;
+
+/**
+ * 
+ * @author Malte Olofsson, Oskar Dahlbeck, Filip Bergström, Lana Abdulla
+ *
+ */
+public class Optimize {
+	// static private State s;
+	static private EventQueue eventQueue;
+	static private Event event;
+	static private Simulator sim;
+	static private Supermarket myS;
+	
+	static int antalKassr = 2;
+	static int max = 5;
+	static double closingTime = 10.0;
+	static long seed = 1234;
+	
+	static double lambda = 1.0;
+	static double lowerPick = 0.5;
+	 
+	static double upperPick = 1.0;
+	static double lowerPay = 2.0;
+	static double upperPay = 3.0;
+	
+	/**
+	 * Kör en simulation och returnerar antalet nekade kunder.
+	 * @param antalKassor
+	 * @param seed
+	 * @return antalet missade kunder
+	 */
+	public static int runOptimize(int antalKassor, long seed) {
+		
+		State s = new State();
+		myS = new Supermarket(antalKassor, max, closingTime, seed, lambda, lowerPick,
+				upperPick, lowerPay, upperPay, eventQueue);
+		
+		eventQueue = new EventQueue();
+		
+		sim = new Simulator(s, eventQueue, new OpenEvent(myS,eventQueue,s));
+		sim.run();
+
+		return myS.getCustomersDenied();
+	}
+	
+	/**
+	 * Hitta minsta antalet kassor för att inte missa kunder.
+	 * @param seed
+	 * @return minsta antal kassor för minsta möjliga missade kunder
+	 */
+	public static int checkKassa(long seed) {
+		
+		int minKassa=1;
+		int customersDenied;
+		int minCustomersDenied;
+		
+		minCustomersDenied = runOptimize(max ,seed);
+		
+		for(int antalKassa = 1; antalKassa<=max; antalKassa++) {
+			customersDenied = runOptimize(antalKassa, seed);
+			
+			if(customersDenied == minCustomersDenied) {
+				minKassa = antalKassa;
+				break;
+			}
+		}
+		return minKassa;
+	}
+	
+	/**
+	 * Hitta minsta antalet kassor för att missa någon kund.
+	 * @param seed
+	 * @return högsta minsta antal kassor
+	 */
+	public static int checkSeed(long seed) {
+		Random random = new Random(seed);
+		
+		int highest=0;
+		int counter=0;
+		
+		while(counter<100) {//Loopen slutar köra om highest inte ändrats på 100 iterationer
+			int test = checkKassa(random.nextInt());//Test får värdet av beräkningen från checkKassa
+			if(test>highest) {
+				highest=test;
+				//Startar om counter för att börja om testet.
+				counter=0;
+			}else {
+				counter++;
+			}
+		}
+		return highest;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("Minsta antal kassor som ger minimalt missade kunder: " + checkSeed(seed));
+	}
+}
