@@ -1,9 +1,5 @@
 /**
- * 
- */
-
-/**
- * @author Malte Olofsson, olomal-8
+ * @author Malte Olofsson, Oskar Dahlbeck, Filip Bergström, Lana Abdulla
  *
  */
 public class OpenEvent extends Event {
@@ -16,6 +12,7 @@ public class OpenEvent extends Event {
 	private String eventName = "Open";
 	private EventQueue eventQueue;
 	private State state;
+	private StopEvent stop;
 	
 	public OpenEvent(Supermarket s, EventQueue eventQueue, State state) {
 		this.mySupermarket = s;
@@ -23,11 +20,17 @@ public class OpenEvent extends Event {
 		this.eventQueue = eventQueue;
 		this.state = state;
 	}
+	
+	/**
+	 * Effect of the OpenEvent, creates the next event and updates the time and opens the shop.
+	 */
+	
 	public void effekt(){
 		state.setCurrentEvent(this);
 		mySupermarket.setOpen();
 		closingTime = mySupermarket.getClosingTime();
-		
+		stop = new StopEvent(state,mySupermarket);
+		eventQueue.addEvent(stop);
 		closeEvent = new CloseEvent(mySupermarket, state); //Skapar ett closeEvent direkt när butiken öppnar
 		eventQueue.addEvent(closeEvent);
 		double arrivalTime = 0;
@@ -40,15 +43,12 @@ public class OpenEvent extends Event {
 			arrivalEvent = new ArrivalEvent(mySupermarket, eventQueue, arrivalTime, state);
 			eventQueue.addEvent(arrivalEvent);
 		}
-		
 	}
+	
 	public String getEventName(){
 		return eventName;
 	}
-
-	
 	public double getTime() {
-		
 		return happeningTime;
 	}
 	public int getCustomerNr() {
