@@ -1,38 +1,38 @@
-/**
- * 
- */
+import Event.Event;
+import Event.EventQueue;
+import Event.OpenEvent;
+import Event.State;
+import Event.Supermarket;
 
 /**
- * @author Malte Olofsson, olomal-8
+ * 
+ * @author Malte Olofsson, Oskar Dahlbeck, Filip Bergström, Lana Abdulla
  *
  */
-public class RunSim {
-	
-	
+public class RunSimulator {
 	public static void main(String[] args) {
-		
-		
 		int antalKassor = 2;
-		int max = 5;
-		double closingTime = 10.0;
-		long seed = 1234;
+		int max = 7;
+		double closingTime = 8.0;
+		long seed = 13;
 		
-		double lambda = 1.0;
-		double lowerPick = 0.5;
+		double lambda = 3.0;
+		double lowerPick = 0.6;
 		 
-		double upperPick = 1.0;
-		double lowerPay = 2.0;
-		double upperPay = 3.0;
+		double upperPick = 0.9;
+		double lowerPay = 0.35;
+		double upperPay = 0.6;
 		EventQueue eventQueue = new EventQueue();
 		Supermarket mySupermarket = new Supermarket(antalKassor,max,closingTime, seed,  lambda,  lowerPick
-				 , upperPick, lowerPay, upperPay,eventQueue);
-		
+				, upperPick, lowerPay, upperPay,eventQueue);
 		
 		State s = new State();
 		Event startEvent = new OpenEvent(mySupermarket, eventQueue , s);
 		View view = new SupermarketView(s, mySupermarket);
-		Simulator sim = new Simulator(s, eventQueue, startEvent, view, mySupermarket);
+		Simulator sim = new Simulator(s, eventQueue, startEvent);
+		
+		view.firstPrint();
 		sim.run();
+		view.lastPrint();
 	}
-	
 }
